@@ -1,9 +1,9 @@
-import Deck from './springs/Deck'
+import AppProvider from './contexts/AppProvider';
 
 function App() {
     return (
-        <div style={{height: '100%'}}>
-            <Deck />
+        <div style={{ height: '100%' }}>
+            <AppProvider />
         </div>
     );
 }
