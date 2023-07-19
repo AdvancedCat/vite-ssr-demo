@@ -3,6 +3,8 @@
 
 ## 项目结构
 
+> 可以参考 [ant-design-pro](https://pro.ant.design/zh-CN/docs/folder)
+
 目前仅假设是前端CSR应用，若考虑扩展至 SSR，则需要将 src 文件夹进一步拆分为 client / server 两部分。
 
 - components
@@ -45,6 +47,7 @@ React Hooks 集合，自定义的业务 hook 等。
 - immer : 不可变数据
 - ahooks : React Hook 集合
 - clsx : classnames 的替代
+- ant-design : React 组件库
 
 ### 开发时
 
