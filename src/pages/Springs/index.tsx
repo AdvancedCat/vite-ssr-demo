@@ -1,20 +1,26 @@
-import { Suspense, useContext } from 'react';
+import { Suspense, useContext, lazy } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 // import Deck from './scene/Deck';
-import {AppConfigContext} from '../../contexts/AppConfigProvider'
+import { AppConfigContext } from '../../contexts/AppConfigProvider';
 
 export default function Springs() {
+    const appConfig = useContext(AppConfigContext);
 
-    const appConfig = useContext(AppConfigContext)
-
-    console.log(appConfig.siteName)
+    console.log(appConfig.siteName);
 
     return (
         <div style={{ height: '100%' }}>
-            <Suspense fallback={<div>loading...</div>}>
-                <Outlet></Outlet>
-            </Suspense>
+            <Outlet></Outlet>
         </div>
+    );
+}
+
+function LazyElement() {
+    const Comp = lazy(() => import(`./scene/Deck`));
+    return (
+        <Suspense fallback="Loading...">
+            <Comp />
+        </Suspense>
     );
 }
 
@@ -30,9 +36,6 @@ export const SpringsRoutes = [
     },
     {
         path: 'deck',
-        async lazy() {
-            let { default: Deck } = await import('./scene/Deck');
-            return { element: <Deck /> };
-        },
+        element: <LazyElement />,
     },
 ];
