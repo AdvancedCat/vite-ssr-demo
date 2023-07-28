@@ -7,6 +7,9 @@ export default function Home() {
             <div className={styles.linkbox}>
                 <Link to="/springs">Springs</Link>
             </div>
+            <div className={styles.linkbox}>
+                <Link to="/editor">Editor</Link>
+            </div>
         </div>
     );
 }

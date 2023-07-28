@@ -12,6 +12,7 @@ import type { RouteObject } from 'react-router-dom';
 
 import Home from './Home';
 import LiginPage from './Login';
+import Editor from './Editor'
 import Springs, { SpringsRoutes } from './Springs';
 
 type IRouteObject = RouteObject & { auth?: boolean };
@@ -37,6 +38,10 @@ const routes: Array<IRouteObject> = [
         children: SpringsRoutes,
         auth: true,
     },
+    {
+        path: '/editor',
+        element: <Editor></Editor>
+    }
 ];
 
 function isLogined() {
