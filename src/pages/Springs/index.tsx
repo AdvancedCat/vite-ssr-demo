@@ -14,16 +14,22 @@ export default function Springs() {
     );
 }
 
-const allSprings = import.meta.glob<{ default: ComponentType<any>; }>('./scene/*/index.tsx')
+const allSprings = import.meta.glob<{ default: ComponentType<any> }>(
+    './scene/*/index.tsx',
+    { eager: true }
+);
 
 const springsRoutes = [
     {
         path: 'deck',
     },
+    {
+        path: 'slide',
+    },
 ];
 
 function LazyElement({ name }: { name: string }) {
-    const Comp = lazy(allSprings[`./scene/${name}/index.tsx`])
+    const Comp = allSprings[`./scene/${name}/index.tsx`].default;
     return (
         <Suspense fallback="Loading...">
             <Comp />
@@ -38,7 +44,13 @@ export const SpringsRoutes = [
         element: (
             <div>
                 {springsRoutes.map((routeCfg) => {
-                    return <Link to="deck" key={routeCfg.path}>{routeCfg.path.toUpperCase()}</Link>;
+                    return (
+                        <div key={routeCfg.path}>
+                            <Link to={routeCfg.path}>
+                                {routeCfg.path.toUpperCase()}
+                            </Link>
+                        </div>
+                    );
                 })}
             </div>
         ),
