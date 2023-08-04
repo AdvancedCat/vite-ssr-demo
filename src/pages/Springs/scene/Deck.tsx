@@ -18,7 +18,7 @@ const to = (i: number) => ({
     rot: -10 + Math.random() * 20,
     delay: i * 100,
 });
-const from = (_: number) => ({ x: 0, rot: 0, scale: 0.5, y: -1000 });
+const from = (_: number) => ({ x: 0, y: -1000, scale: 0.5, rot: 0, });
 const trans = (r: number, s: number) =>
     `perspective(1500px) rotateX(30deg) rotateY(${
         r / 10
@@ -27,7 +27,7 @@ const trans = (r: number, s: number) =>
 function Deck() {
     const [gone] = useState(() => new Set());
     const [props, api] = useSprings(cards.length, (i) => ({
-        ...to(i),
+        to: to(i),
         from: from(i),
     }));
     const bind = useDrag(
