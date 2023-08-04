@@ -1,6 +1,5 @@
-import { Suspense, useContext, lazy } from 'react';
+import { Suspense, useContext, lazy, ComponentType } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-// import Deck from './scene/Deck';
 import { AppConfigContext } from '../../contexts/AppConfigProvider';
 
 export default function Springs() {
@@ -15,8 +14,16 @@ export default function Springs() {
     );
 }
 
-function LazyElement() {
-    const Comp = lazy(() => import(`./scene/Deck`));
+const allSprings = import.meta.glob<{ default: ComponentType<any>; }>('./scene/*/index.tsx')
+
+const springsRoutes = [
+    {
+        path: 'deck',
+    },
+];
+
+function LazyElement({ name }: { name: string }) {
+    const Comp = lazy(allSprings[`./scene/${name}/index.tsx`])
     return (
         <Suspense fallback="Loading...">
             <Comp />
@@ -30,12 +37,16 @@ export const SpringsRoutes = [
         index: true,
         element: (
             <div>
-                <Link to="deck">Deck</Link>
+                {springsRoutes.map((routeCfg) => {
+                    return <Link to="deck" key={routeCfg.path}>{routeCfg.path.toUpperCase()}</Link>;
+                })}
             </div>
         ),
     },
-    {
-        path: 'deck',
-        element: <LazyElement />,
-    },
+    ...springsRoutes.map((routeCfg) => {
+        return {
+            path: routeCfg.path,
+            element: <LazyElement name={routeCfg.path} />,
+        };
+    }),
 ];

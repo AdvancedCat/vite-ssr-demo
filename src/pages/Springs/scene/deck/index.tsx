@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { animated, useSprings, to as interpolate } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
-import styles from './Deck.module.css';
+import styles from './index.module.css';
 
 const cards = [
     '//img14.360buyimg.com/mobilecms/s360x360_jfs/t1/118103/1/40095/116412/64acc5c6F6d4f9341/afad3d8fb564359b.jpg!q70.dpg.webp',
