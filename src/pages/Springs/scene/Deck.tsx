@@ -3,7 +3,6 @@ import { animated, useSprings, to as interpolate } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import styles from './Deck.module.css';
 
-
 const cards = [
     '//img14.360buyimg.com/mobilecms/s360x360_jfs/t1/118103/1/40095/116412/64acc5c6F6d4f9341/afad3d8fb564359b.jpg!q70.dpg.webp',
     '//img14.360buyimg.com/mobilecms/s360x360_jfs/t1/185496/4/34796/82590/64b27804F630b5c0d/22fbad340365822b.jpg!q70.dpg.webp',
@@ -26,7 +25,6 @@ const trans = (r: number, s: number) =>
     }deg) rotateZ(${r}deg) scale(${s})`;
 
 function Deck() {
-    
     const [gone] = useState(() => new Set());
     const [props, api] = useSprings(cards.length, (i) => ({
         ...to(i),
