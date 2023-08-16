@@ -1,11 +1,28 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { performance, PerformanceObserver } from 'perf_hooks';
 import express from 'express';
+
+import paths from './paths.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
+
+// 初始化监听器逻辑，用于性能监控
+const perfObserver = new PerformanceObserver((items) => {
+    items.getEntries().forEach((entry) => {
+        console.log(
+            '[performance]',
+            entry.name,
+            entry.duration.toFixed(2),
+            'ms'
+        );
+    });
+    performance.clearMarks();
+});
+perfObserver.observe({ entryTypes: ['measure'] });
 
 let createServer = async () => {
     throw new Error('createServer is empty, please specify it.');
@@ -13,24 +30,34 @@ let createServer = async () => {
 
 if (isProd) {
     createServer = async () => {
-        const resolve = (p) => path.resolve(__dirname, p);
-        const indexProd = fs.readFileSync(resolve('../dist/client/index.html'),{encoding: 'utf-8'});
+        const indexProd = fs.readFileSync(paths.appIndexHtml, {
+            encoding: 'utf-8',
+        });
+        const render = (
+            await import(path.resolve(paths.appServer, 'entry-server.js'))
+        ).render;
+
         const app = express();
         app.use((await import('compression')).default());
         app.use(
-            (await import('serve-static')).default(resolve('../dist/client'), {
+            (await import('serve-static')).default(paths.appClient, {
                 index: false,
             })
         );
 
         app.use('*', async (req, res, next) => {
-            try {
-                const template = indexProd;
-                // @ts-ignore
-                const render = (await import(resolve('../dist/server/entry-server.js'))).render;
+            if (req.query?.csr) {
+                res.status(200)
+                    .set({ 'Content-Type': 'text/html' })
+                    .end(indexProd);
+                return;
+            }
 
-                const appHtml = await render(req);
-                const html = template
+            try {
+                performance.mark('render-start');
+                // TODO: 这里应该加入预获取数据的流程，比如 data = await fetchData()，从而传入到组件 ssr
+                const appHtml = await render(req /* data */);
+                const html = indexProd
                     .replace(`<!--ssr-outlet-->`, appHtml)
                     .replace(
                         '<!--ssr-data-outlet-->',
@@ -38,6 +65,12 @@ if (isProd) {
                             ssr: true,
                         })}</script>`
                     );
+                performance.mark('render-end');
+                performance.measure(
+                    'renderToString',
+                    'render-start',
+                    'render-end'
+                );
                 res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
             } catch (error) {
                 console.error(error);
@@ -72,11 +105,19 @@ if (isDev) {
 
                 template = await vite.transformIndexHtml(url, template);
                 const { render } = await vite.ssrLoadModule(
-                    '/src/entry-server.tsx'
+                    path.resolve(paths.appSrc, 'entry-server.tsx')
                 );
+                const mod = await vite.moduleGraph.getModuleByUrl(
+                    path.resolve(paths.appSrc, 'entry-client.tsx')
+                ); /* replace with your entry */
+                // const cssUrls = mod.ssrTransformResult.deps.filter((d) =>
+                //     d.endsWith('.css')
+                // );
+                console.log('cssUrls', mod);
+
                 const appHtml = await render(req);
                 const html = template
-                    .replace(`<!--ssr-outlet-->`, appHtml)
+                    .replace(`<!--ssr-html-outlet-->`, appHtml)
                     .replace(
                         '<!--ssr-data-outlet-->',
                         `<script>window.__ssr_data__=${JSON.stringify({

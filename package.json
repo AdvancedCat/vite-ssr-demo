@@ -11,7 +11,7 @@
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "npm run dev:prod"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
