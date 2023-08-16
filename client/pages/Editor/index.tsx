@@ -2,9 +2,8 @@ import {
     useCallback,
     useState,
     useRef,
-    useEffect,
-    useLayoutEffect,
 } from 'react';
+import { json, useLoaderData } from 'react-router-dom';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { produce } from 'immer';
 import { DndProvider, useDrop, useDrag } from 'react-dnd';
@@ -15,14 +14,10 @@ import { useWhyDidYouUpdate } from 'ahooks';
 
 import type { ICard } from './components/TplCard';
 
-const tplList = Array(40)
-    .fill(0)
-    .map((_, index) => ({
-        id: `tpl_${index}`,
-        name: `模板${index}`,
-    }));
+type TplListItem = { id: string; name: string };
 
 export default function EditorPage() {
+    
     return (
         <DndProvider backend={HTML5Backend}>
             <div className={styles.main}>
@@ -34,9 +29,11 @@ export default function EditorPage() {
 }
 
 function LeftPanel() {
+    const data = useLoaderData() as { tplList: TplListItem[] };
+    
     return (
         <div className={styles.leftpanel}>
-            {tplList.map((item) => {
+            {data.tplList.map((item) => {
                 return <TplCard {...item} key={item.id}></TplCard>;
             })}
         </div>
@@ -46,7 +43,7 @@ function LeftPanel() {
 function ViewportWrap() {
     return (
         <div className={styles.viewport_wrap}>
-                <Viewport></Viewport>
+            <Viewport></Viewport>
         </div>
     );
 }
@@ -98,3 +95,17 @@ function Viewport() {
         </div>
     );
 }
+
+export const route = {
+    path: '/editor',
+    async loader() {
+        const tplList = Array(40)
+            .fill(0)
+            .map((_, index) => ({
+                id: `tpl_${index}`,
+                name: `模板${index}`,
+            }));
+        return json({ tplList });
+    },
+    element: <EditorPage></EditorPage>,
+};

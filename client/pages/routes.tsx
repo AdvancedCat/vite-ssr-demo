@@ -7,7 +7,7 @@ import type { RouteObject } from 'react-router-dom';
 
 import Home from './Home';
 import LoginPage from './Login';
-import Editor from './Editor'
+import { route as EditorRoute } from './Editor';
 import Springs, { SpringsRoutes } from './Springs';
 
 type IRouteObject = RouteObject & { auth?: boolean };
@@ -17,7 +17,7 @@ export const routes: Array<IRouteObject> = [
     {
         path: '/',
         element: <Home />,
-        errorElement: <div>404</div>
+        errorElement: <div>404</div>,
     },
     {
         path: '/404',
@@ -33,8 +33,5 @@ export const routes: Array<IRouteObject> = [
         children: SpringsRoutes,
         auth: true,
     },
-    {
-        path: '/editor',
-        element: <Editor></Editor>
-    }
+    EditorRoute,
 ];

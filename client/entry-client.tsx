@@ -6,9 +6,8 @@ import { MainRouter } from './pages/ClientRouter';
 
 declare global {
     interface Window {
-        __ssr_data__: any
+        __ssr_data__: any;
     }
-
 }
 
 const ssrData = window.__ssr_data__ || {};
@@ -23,7 +22,7 @@ const reactNode = (
 
 let root;
 if (ssrData.ssr) {
-    root = ReactDOM.hydrateRoot(container, reactNode);
+    ReactDOM.hydrateRoot(container, reactNode);
 } else {
     root = ReactDOM.createRoot(container);
     root.render(reactNode);
