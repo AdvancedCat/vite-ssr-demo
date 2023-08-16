@@ -34,13 +34,13 @@ if (isProd) {
             encoding: 'utf-8',
         });
         const render = (
-            await import(path.resolve(paths.appServer, 'entry-server.js'))
+            await import(path.resolve(paths.appDistServer, 'entry-server.js'))
         ).render;
 
         const app = express();
         app.use((await import('compression')).default());
         app.use(
-            (await import('serve-static')).default(paths.appClient, {
+            (await import('serve-static')).default(paths.appDistClient, {
                 index: false,
             })
         );
@@ -105,10 +105,10 @@ if (isDev) {
 
                 template = await vite.transformIndexHtml(url, template);
                 const { render } = await vite.ssrLoadModule(
-                    path.resolve(paths.appSrc, 'entry-server.tsx')
+                    path.resolve(paths.appClient, 'entry-server.tsx')
                 );
                 const mod = await vite.moduleGraph.getModuleByUrl(
-                    path.resolve(paths.appSrc, 'entry-client.tsx')
+                    path.resolve(paths.appClient, 'entry-client.tsx')
                 ); /* replace with your entry */
                 // const cssUrls = mod.ssrTransformResult.deps.filter((d) =>
                 //     d.endsWith('.css')

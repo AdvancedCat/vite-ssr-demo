@@ -1,8 +1,8 @@
 import ReactDOMServer from 'react-dom/server';
-import App from './App.tsx';
-import { MainRouter } from './pages/ServerRouter.tsx';
+import App from './App.js';
+import { MainRouter } from './pages/ServerRouter.js';
 import { createStaticHandler } from 'react-router-dom/server';
-import { routes } from './pages/routes.tsx';
+import { routes } from './pages/routes.js';
 import type { Request } from 'express';
 
 export async function render(req: Request) {

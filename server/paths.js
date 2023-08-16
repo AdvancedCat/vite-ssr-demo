@@ -9,9 +9,11 @@ export default {
     dotenv: resolveApp('.env'),
     appPath: resolveApp('.'),
     appDist: resolveApp('./dist'),
-    appClient: resolveApp('./dist/client'),
+    appDistClient: resolveApp('./dist/client'),
     appIndexHtml: resolveApp('./dist/client/index.html'),
-    appServer: resolveApp('./dist/server'),
+    appDistServer: resolveApp('./dist/server'),
     appPackageJson: resolveApp('./package.json'),
-    appSrc: resolveApp('./src')
+    appClient: resolveApp('./client'),
+    appServer: resolveApp('./server'),
+    appPublic: resolveApp('public')
 }
