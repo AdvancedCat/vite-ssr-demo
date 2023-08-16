@@ -1,10 +1,10 @@
-import { MainRouter } from '../pages/routes';
+import React from 'react'
 import AppConfigProvider from './AppConfigProvider';
 
-export default function AppProvider() {
+export default function AppProvider({children}: React.PropsWithChildren) {
     return (
         <AppConfigProvider>
-            <MainRouter></MainRouter>
+            {children}
         </AppConfigProvider>
     );
 }

@@ -1,9 +1,10 @@
+import type { PropsWithChildren } from 'react';
 import AppProvider from './contexts/AppProvider';
 
-function App() {
+function App({ children }: PropsWithChildren) {
     return (
         <div style={{ height: '100%' }}>
-            <AppProvider />
+            <AppProvider >{children}</AppProvider>
         </div>
     );
 }
