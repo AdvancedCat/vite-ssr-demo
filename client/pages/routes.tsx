@@ -5,19 +5,30 @@
 
 import type { RouteObject } from 'react-router-dom';
 
+import MainLayout from '../layouts/MainLayout';
 import Home from './Home';
 import LoginPage from './Login';
 import { route as EditorRoute } from './Editor';
 import Springs, { SpringsRoutes } from './Springs';
 
-type IRouteObject = RouteObject & { auth?: boolean };
-
 // 这里是完整的路由
-export const routes: Array<IRouteObject> = [
+export const routes: Array<RouteObject> = [
     {
         path: '/',
-        element: <Home />,
-        errorElement: <div>404</div>,
+        element: <MainLayout />,
+        children: [
+            {
+                index: true,
+                element: <Home />,
+                errorElement: <div>404</div>,
+            },
+            {
+                path: 'springs',
+                element: <Springs />,
+                children: SpringsRoutes,
+            },
+            EditorRoute,
+        ],
     },
     {
         path: '/404',
@@ -25,13 +36,6 @@ export const routes: Array<IRouteObject> = [
     },
     {
         path: '/login',
-        element: <LoginPage></LoginPage>,
+        element: <LoginPage />,
     },
-    {
-        path: '/springs',
-        element: <Springs />,
-        children: SpringsRoutes,
-        auth: true,
-    },
-    EditorRoute,
 ];

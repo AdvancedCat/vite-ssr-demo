@@ -97,7 +97,7 @@ function Viewport() {
 }
 
 export const route = {
-    path: '/editor',
+    path: 'editor',
     async loader() {
         const tplList = Array(40)
             .fill(0)
