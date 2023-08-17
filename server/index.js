@@ -4,10 +4,8 @@ import { performance, PerformanceObserver } from 'perf_hooks';
 import express from 'express';
 
 import paths from './paths.js';
-import { createDevServer } from './devServer.js';
-
-const isDev = process.env.NODE_ENV === 'development';
-const isProd = process.env.NODE_ENV === 'production';
+import { createDevServerFactory } from './devServer.js';
+import { isDev, isProd } from './shared/env.js'
 
 // 初始化监听器逻辑，用于性能监控
 const perfObserver = new PerformanceObserver((items) => {
@@ -27,8 +25,10 @@ let createServer = () => {
     throw new Error('createServer is empty, please specify it.');
 };
 
+const app = express();
+
 if (isDev) {
-    createServer = createDevServer;
+    createServer = createDevServerFactory(app);
 }
 
 if (isProd) {
@@ -40,7 +40,6 @@ if (isProd) {
             await import(path.resolve(paths.appDistServer, 'entry-server.js'))
         ).render;
 
-        const app = express();
         app.use((await import('compression')).default());
         app.use(
             (await import('serve-static')).default(paths.appDistClient, {
@@ -80,11 +79,11 @@ if (isProd) {
                 next(error);
             }
         });
-
-        app.listen(5173, () => {
-            console.log('Listening at port 5173');
-        });
     };
 }
 
-createServer();
+await createServer();
+
+app.listen(5173, () => {
+    console.log('Listening at port 5173');
+});

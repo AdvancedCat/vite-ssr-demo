@@ -12,6 +12,7 @@ import { route as EditorRoute } from './Editor';
 import Springs, { SpringsRoutes } from './Springs';
 
 // 这里是完整的路由
+// ranking routes: static segment, dynamic segment, star pattern
 export const routes: Array<RouteObject> = [
     {
         path: '/',
