@@ -14,12 +14,16 @@
     "preview": "npm run dev:prod"
   },
   "dependencies": {
+    "@koa/router": "^12.0.0",
     "@react-spring/web": "^9.7.3",
     "@use-gesture/react": "^10.2.27",
     "ahooks": "^3.7.8",
     "compression": "^1.7.4",
     "express": "^4.18.2",
     "immer": "^10.0.2",
+    "koa": "^2.14.2",
+    "koa-connect": "^2.1.0",
+    "koa-static": "^5.0.0",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

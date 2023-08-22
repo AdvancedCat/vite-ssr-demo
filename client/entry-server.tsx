@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import type { Request } from 'express';
 import App from './App.js';
 import { MainRouter } from './pages/ServerRouter.js';
 import { createStaticHandler } from 'react-router-dom/server';
 import { routes } from './pages/routes.js';
-import type { Request } from 'express';
 
 export async function render(req: Request) {
     // Step 1. 构造一个 Request 对象，里面含义完整的url路径，以及 headers 等参数，传入到 routes 中进行路由匹配，如获取 params 等、触发 loader
@@ -36,7 +36,7 @@ function createFetchRequest(req: Request) {
     let url = new URL(req.originalUrl || req.url, origin);
 
     let controller = new AbortController();
-    req.on('close', () => controller.abort());
+    // req.on('close', () => controller.abort());
 
     let headers = new Headers();
 
